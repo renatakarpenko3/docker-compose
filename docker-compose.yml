@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  mysql:
+    build:
+      context: ./db
+    container_name: mysql-container
+    ports:
+      - "6:3306"
+    networks:
+      - app-network
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  go-app:
+    build:
+      context: ./app
+    container_name: go-app-container
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
